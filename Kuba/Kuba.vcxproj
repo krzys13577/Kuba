@@ -27,6 +27,7 @@
     <ProjectGuid>{5b48955e-dabe-4fc9-99f3-c64f69521b18}</ProjectGuid>
     <RootNamespace>Kuba</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Client</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
