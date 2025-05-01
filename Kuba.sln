@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kuba", "Kuba\Kuba.vcxproj", "{5B48955E-DABE-4FC9-99F3-C64F69521B18}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1", "Project1\Project1.vcxproj", "{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Auxilia", "Auxilia\Auxilia.vcxitems", "{62BEF31E-E7BC-4B99-81E9-282B34F9D38E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Debug|x64.ActiveCfg = Debug|x64
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Debug|x64.Build.0 = Debug|x64
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Debug|x86.ActiveCfg = Debug|Win32
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Debug|x86.Build.0 = Debug|Win32
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Release|x64.ActiveCfg = Release|x64
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Release|x64.Build.0 = Release|x64
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Release|x86.ActiveCfg = Release|Win32
+		{5B48955E-DABE-4FC9-99F3-C64F69521B18}.Release|x86.Build.0 = Release|Win32
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Debug|x64.ActiveCfg = Debug|x64
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Debug|x64.Build.0 = Debug|x64
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Debug|x86.ActiveCfg = Debug|Win32
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Debug|x86.Build.0 = Debug|Win32
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Release|x64.ActiveCfg = Release|x64
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Release|x64.Build.0 = Release|x64
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Release|x86.ActiveCfg = Release|Win32
+		{C5381CDC-4C9C-43D5-AAB7-046B1C423C20}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CAFBD8D-C693-4298-8A4A-41C40359DA31}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Auxilia\Auxilia.vcxitems*{5b48955e-dabe-4fc9-99f3-c64f69521b18}*SharedItemsImports = 4
+		Auxilia\Auxilia.vcxitems*{62bef31e-e7bc-4b99-81e9-282b34f9d38e}*SharedItemsImports = 9
+		Auxilia\Auxilia.vcxitems*{c5381cdc-4c9c-43d5-aab7-046b1c423c20}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal
