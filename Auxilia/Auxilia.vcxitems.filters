@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{4e949437-489d-450a-9a3a-61ac4f5d1529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sorce">
+      <UniqueIdentifier>{4c0b2428-2cbf-41a3-8ead-ed232152ce97}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)window_handle_mine.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)triangle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Vec_math.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)painting.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BMP.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)window_handle_mine.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)painting.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Vec_math.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)BMP.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
