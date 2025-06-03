@@ -18,8 +18,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Vec_math.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)painting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)BMP.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)painting.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)readingFromOBJ.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -34,6 +39,9 @@
       <Filter>Sorce</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)BMP.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)readingFromOBJ.c">
       <Filter>Sorce</Filter>
     </ClCompile>
   </ItemGroup>

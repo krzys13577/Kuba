@@ -18,3 +18,9 @@ typedef struct Trianle {
 	Trianle_vert verts;
 	Trianle_UV UVs;
 } Trianle;
+
+
+typedef struct Mesh {
+	int tri_count;
+	Trianle* tris;
+} Mesh;

@@ -11,6 +11,6 @@ void Create_window(LRESULT(*proc)(HWND wind, UINT msg, WPARAM wp, LPARAM lp), HW
 
 void InvalidateRect_mine(HWND wind);
 
-void resetWindowBuffer(GameWindowBuffer* gameWindowBuffer, BITMAPINFO* bitmapInfo, HWND wind);
+void resetWindowBuffer(GameWindowBuffer* gameWindowBuffer, BITMAPINFO* bitmapInfo, HWND wind, GameWindowBuffer* depth_buffer);
 
 void handle_entires(HWND wind);

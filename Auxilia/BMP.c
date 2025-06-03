@@ -3,32 +3,33 @@
 #include "painting.h"
 
 
-
-GameWindowBuffer read_file(char a[200]) {
+// to nie dzia³a
+GameWindowBuffer read_file(char path[200]) {
     FILE* fitr;
     //"C:\\Users\\KrzysztofPolowczyk\\Desktop\\W.bmp"
     // Open the file in binary read mode
-    fopen_s(&fitr, "C:\\Users\\KrzysztofPolowczyk\\Desktop\\Tunk.bmp", "r");
+    fopen_s(&fitr, path, "r");
 
+    
+    // wspieram tylko RGBA ewentualnie ABGR
 
-    // wspieram tylko RGBA ewentualnie ARGB
+    char* buf = (char*)malloc(6);
 
-    char* buf = (char*)malloc(18289152);
+    fread(buf, 1, 6, fitr);
 
-    int size = fread(buf, 1, 18289152, fitr);
+    int size = *(int*)(buf + 2);
+    free(buf);
 
-    printf("%d x \n", *(int*)(buf + 18));
-    printf("%d y \n", *(int*)(buf + 22));
-    printf("%d head \n", *(int*)(buf + 10));
+    char *img = (char*)malloc(size-6);
+
+    fread(img, 1, size-6, fitr);
 
     GameWindowBuffer out = { 0 };
 
-    int x = *(int*)(buf + 18);
-    int y = *(int*)(buf + 22);
-    int head = *(int*)(buf + 10);
+    int x = *(int*)(img + 12);
+    int y = *(int*)(img + 16);
+    int head = *(int*)(img + 4);
     int pic_size = x * y;
-    int c = 0;
-    int break_point = 30;
 
     out.h = y;
     out.w = x;
@@ -37,12 +38,16 @@ GameWindowBuffer read_file(char a[200]) {
 
     unsigned char* textture;
 
-    textture = buf + head;
 
-    //free(buf);
+    textture = img + head;
+
     fclose(fitr);
 
     out.memory = textture;
+    //printf("file %s\n", path);
+    //printf("size: %d\n", size);
+    //printf("W: %d H:%d\n", out.w,out.h);
+    //printf("R: %d G:%d, B:%d A:%d\n", out.memory[0], out.memory[1], out.memory[2], out.memory[3]);
 
     return out;
 }

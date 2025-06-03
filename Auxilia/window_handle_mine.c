@@ -1,6 +1,7 @@
 #include <windows.h>
 #include "window_handle_mine.h"
 
+
 void Create_window(LRESULT(*proc)(HWND wind, UINT msg, WPARAM wp, LPARAM lp), HWND* wind_out) {
 
     WNDCLASS wc = { sizeof(WNDCLASS) };
@@ -32,12 +33,21 @@ void InvalidateRect_mine(HWND wind) {
     InvalidateRect(wind, NULL, FALSE);
 }
 
-void resetWindowBuffer(GameWindowBuffer* gameWindowBuffer, BITMAPINFO* bitmapInfo, HWND wind)
+void resetWindowBuffer(GameWindowBuffer* gameWindowBuffer, BITMAPINFO* bitmapInfo, HWND wind, GameWindowBuffer* depth_buffer)
 {
     RECT rect = { 0 };
     GetClientRect(wind, &rect);
     gameWindowBuffer->h = rect.bottom;
     gameWindowBuffer->w = rect.right;
+
+    depth_buffer->h = rect.bottom;
+    depth_buffer->w = rect.right;
+
+    depth_buffer->memory = (unsigned char*)malloc(rect.bottom * rect.right *4);
+
+    for (int i = 0; i < rect.bottom * rect.right; i++) {
+        ((int *)(depth_buffer->memory))[i] = 0;
+    }
 
     if (gameWindowBuffer->memory)
     {
@@ -64,3 +74,15 @@ void handle_entires(HWND wind) {
         DispatchMessage(&msg);
     }
 }
+
+GameWindowBuffer init_GameWindowBuffer(int w, int h) {
+    GameWindowBuffer out;
+    out.h = h;
+    out.w = w;
+    int *to_clear = (int*)malloc(sizeof(int)*h*w);
+    for (int i = 0; i < w * h; i++) {
+        to_clear[i] = 0;
+    }
+    out.memory = (unsigned char*)to_clear;
+    return out;
+};
