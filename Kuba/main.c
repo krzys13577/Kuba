@@ -5,6 +5,7 @@
 #include "Vec_math.h"
 #include "BMP.h"
 #include "readingFromOBJ.h"
+#include "rednering.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -17,14 +18,21 @@ int fps = 0;
 
 
 void print_mesh_info(const Mesh* mesh) {
+    for (int i = 0; i < mesh->vert_count; ) {
+        printf("x: %f, y: %f, z: %f\n", (mesh->verst_reference + i)->x, (mesh->verst_reference + i)->y, (mesh->verst_reference + i)->z);
+
+        printf("\n");
+        i += 1;
+    };
+
     for (int i = 0; i < mesh->tri_count; ++i) {
         printf("Triangle %d:\n", i);
 
         // Vertices
         printf("  Vertices:\n");
-        printf("    A: (%.2f, %.2f, %.2f)\n", mesh->tris[i].verts.a.x, mesh->tris[i].verts.a.y, mesh->tris[i].verts.a.z);
-        printf("    B: (%.2f, %.2f, %.2f)\n", mesh->tris[i].verts.b.x, mesh->tris[i].verts.b.y, mesh->tris[i].verts.b.z);
-        printf("    C: (%.2f, %.2f, %.2f)\n", mesh->tris[i].verts.c.x, mesh->tris[i].verts.c.y, mesh->tris[i].verts.c.z);
+        printf("    A: (%.2f, %.2f, %.2f)\n", mesh->tris[i].verts.a->x, mesh->tris[i].verts.a->y, mesh->tris[i].verts.a->z);
+        printf("    B: (%.2f, %.2f, %.2f)\n", mesh->tris[i].verts.b->x, mesh->tris[i].verts.b->y, mesh->tris[i].verts.b->z);
+        printf("    C: (%.2f, %.2f, %.2f)\n", mesh->tris[i].verts.c->x, mesh->tris[i].verts.c->y, mesh->tris[i].verts.c->z);
 
         // UVs
         printf("  UVs:\n");
@@ -36,9 +44,6 @@ void print_mesh_info(const Mesh* mesh) {
     }
 }
 
-void join_mesh(Mesh* a, Mesh* b, Vec_1x3 offset, int x_rot, int y_rot, int z_rot, float scale) {
-
-}
 
 // handle inputs heare #ToDO apstract this mess
 LRESULT CALLBACK windProc(HWND wind, UINT msg, WPARAM wp, LPARAM lp)
@@ -121,30 +126,67 @@ int main() {
     //tri2.UVs.b = (Vec_1x2){ 500,0 };
     //tri2.UVs.c = (Vec_1x2){ 0,500 };
 
+    GameWindowBuffer texture = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\T-34.bmp");
+    GameWindowBuffer BLUE = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\BLUE.bmp");
+    GameWindowBuffer RED = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\red.bmp");
+    
+
     DWORD ThreadId_send;
 
-    Mesh mesh1 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt");
-    print_mesh_info(&mesh1);
+    Mesh mesh1 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt", texture.w, texture.h);
+    Mesh mesh2 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt", texture.w, texture.h);
+    //print_mesh_info(&mesh1);
+
+    mesh1.pos = (Vec_1x3){0,0,15.0};
+    mesh1.rot = (Vec_1x3){0,0,0};
+    mesh1.scale = (Vec_1x3){0.3,0.3,0.3};
+    mesh2.pos = (Vec_1x3){0,0,40};
+    mesh2.rot = (Vec_1x3){0,0,0};
+    mesh2.scale = (Vec_1x3){0.3,0.3,0.3 };
+
+    //Mesh mesh2 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube2.txt");
 
     CreateThread(NULL, 0, FPS, NULL, 0, NULL);
 
-    //GameWindowBuffer texture = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\T-34.bmp");
-    GameWindowBuffer BLUE = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\BLUE.bmp");
-    GameWindowBuffer RED = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\red.bmp");
+    Camera cam = {
+        {0,0,0},
+        {0,0,0},
+        {0,0,-1},
+        {1,0,0},
+        {1,0,0}
+    };
 
+    Sceane sceane = init_sceane(1, cam);
+
+    sceane.objects[0] = &mesh1;
+    //sceane.objects[1] = &mesh2;
+
+    
     float counter = 0;
     while (Is_running) {
+        mesh1.rot.z = counter/10;
+        mesh1.rot.x = counter/10;
+        //mesh2.rot.z = counter / 10;
+        //mesh2.rot.x = counter / 10;
+        //mesh1.rot.y = counter/20;
+
+        //mesh1.pos.y = sin(counter)*0.2;
+        //mesh1.rot.y = counter*2;
+        //mesh1.rot.y = counter/8;
+        //mesh1.scale.y = 4* sin(counter)* sin(counter);
+        //mesh1.scale.x = 4* sin(counter)* sin(counter);
+        //mesh1.scale.y = 4* sin(counter)* sin(counter);
         
         handle_entires(wind);
 
         clear(&gameWindowBuffer, &Depth);
-        for (int i = 0; i < mesh1.tri_count; i++) {
+        redner_sceane(&sceane, &gameWindowBuffer, &texture, &Depth);
 
-            Draw_triangle(mesh1.tris + i, &gameWindowBuffer, &BLUE, &Depth);
-        }
-        
         InvalidateRect(wind, NULL, FALSE);
 
         fps += 1;
+        //Sleep(500);
+        counter += 0.01;
     }
 }
+

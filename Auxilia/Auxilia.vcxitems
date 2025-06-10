@@ -15,16 +15,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)BMP.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)dinamick_list.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)painting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)readingFromOBJ.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rednering.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)triangle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Vec_math.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)window_handle_mine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)BMP.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)dinamick_list.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)painting.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)readingFromOBJ.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)rendering.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Vec_math.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)window_handle_mine.c" />
   </ItemGroup>

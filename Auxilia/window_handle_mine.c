@@ -3,7 +3,7 @@
 
 
 void Create_window(LRESULT(*proc)(HWND wind, UINT msg, WPARAM wp, LPARAM lp), HWND* wind_out) {
-
+    
     WNDCLASS wc = { sizeof(WNDCLASS) };
     BITMAPINFO bitmapInfo;
 

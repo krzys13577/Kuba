@@ -27,6 +27,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)readingFromOBJ.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)rednering.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)dinamick_list.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)window_handle_mine.c">
@@ -42,6 +48,12 @@
       <Filter>Sorce</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)readingFromOBJ.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)rendering.c">
+      <Filter>Sorce</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)dinamick_list.c">
       <Filter>Sorce</Filter>
     </ClCompile>
   </ItemGroup>

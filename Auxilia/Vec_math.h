@@ -49,3 +49,5 @@ int get_len(Vec_1x3* line);
 
 int is_in_tri(Vec_1x2* side_a, Vec_1x2* side_b, Vec_1x2* side_c, Vec_1x2* point_vec_1, Vec_1x2* point_vec_2, Vec_1x2* point_vec_3);
 
+Vec_1x4 multily_by_matrix_advanced(Vec_1x3* point, Mat4x4 mat, Vec_1x3* out);
+

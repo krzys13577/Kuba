@@ -1,252 +1,74 @@
 #include <stdio.h>
 #include "readingFromOBJ.h"
 #include "triangle.h"
+#include "dinamick_list.h"
 #include <stdlib.h>
 
-Mesh load_mesh_from_file(char path[200]) {
-    FILE* file;
-
-    fopen_s(&file, path, "rb");
-
+Mesh load_mesh_from_file(char path[200], int w, int h) {
+    FILE* file = fopen(path, "r");
     Mesh out;
-    char temp_store[6];
+    char line[300];
+    
+    Vector list_verts_reference;
+    vec_init_my(&list_verts_reference, sizeof(Vec_1x3));
 
+    Vector list_U;
+    vec_init_my(&list_U, sizeof(Vec_1x2));
 
-    fread(temp_store, 1, 6, file);
-    int file_lenght = atoi(temp_store);
-    char* data = (char*)malloc(file_lenght+1);
+    Vector list_tris;
+    vec_init_my(&list_tris, sizeof(Trianle));
 
-    //printf("Data read: %d\n", file_lenght+1);
+    while (fgets(line, sizeof(line), file)) {
+        switch (line[0])
+        {
+        float a;
+        float b;
+        float c;
 
-    fread(data, 1, file_lenght+1, file);
-    data[file_lenght] = '\0';
-    int list_counter = 0;
-    int verts_counter = 0;
-    int UV_counter = 0;
-    int tris_counter = 0;
+        int x;
+        int y;
 
-    Vec_1x2* UV_list = NULL;
-    Vec_1x3* vert_list = NULL;
-    Trianle* tri_list = NULL;
+        int x1;
+        int y1;
+ 
+        int x2;
+        int y2;
 
-    for (int i = 0; i < file_lenght; i++){
+        case 'v':
+            sscanf_s(line+2, "%f %f %f", &a, &b, &c);
+            //printf("hej: %f %f %f\n", a, b, c);
+            push_my(&list_verts_reference, (void*)(&(Vec_1x3){a, b, c}));
+            break;
+        case 't':
+            out.verts = (Vec_1x3*)malloc(list_verts_reference.size * sizeof(Vec_1x3));
+            sscanf_s(line + 2, "%f %f", &a, &b);
+            //printf("kk: %f %f\n", a, b);
+            push_my(&list_U, (void*)(&(Vec_1x2) {a*w, b*h}));
+            break;
+        case 'f':
+            sscanf_s(line + 2, "%d/%d %d/%d %d/%d", &x, &y, &x1, &y1, &x2, &y2);
+            Trianle temp;
 
-        if (data[i] == 'n') {
-            char num_char[7] = { data[i + 2], data[i + 3], data[i + 4], data[i + 5] , data[i + 6] , data[i + 7], '\0' };
-            if(list_counter == 2) {
-                tri_list = (Trianle*)malloc(sizeof(Trianle) * atoi(num_char));
-                out.tri_count = atoi(num_char);
-                out.tris = tri_list;
-            }
-            else if (list_counter) {
-                UV_list = (Vec_1x2*)malloc(sizeof(Vec_1x2) * atoi(num_char));
-            }
-            else {
-   
-                vert_list = (Vec_1x3*)malloc(sizeof(Vec_1x3) * atoi(num_char));
-            }
-            
-            list_counter += 1;
-            
+            //printf("%d/%d %d/%d %d/%d\n", x, y, x1, y1, x2, y2);
+            temp.verts = (Trianle_vert){ out.verts + x - 1, out.verts + x1 - 1, out.verts + x2 - 1 };
+            temp.UVs = (Trianle_UV){ *(Vec_1x2*)get_my(&list_U, y-1),*(Vec_1x2*)get_my(&list_U, y1-1),*(Vec_1x2*)get_my(&list_U, y2-1) };
+            push_my(&list_tris, &temp);
+            break;
+        default:
+            break;
         }
-
-        if (data[i] == 'v') {
-            float xyz[3];
-  
-            char* str = (char *)malloc(500);
-
-            int j = i + 2;
-            int counter = 0;
-            int pos_counter = 0;
-            while (1) {
-                if (data[j]=='\n') {
-                    str[counter] = '\0';
-                    xyz[pos_counter] = atof(str);
-                    pos_counter += 1;
-                    counter = 0;
-                    break;
-                }
-                if (data[j] == ' ') {
-                    str[counter] = '\0';
-                    xyz[pos_counter] = atof(str);
-                    pos_counter += 1;
-                    counter = 0;
-                }
-                else
-                {
-                    str[counter] = data[j];
-                    counter += 1;
-                }
-   
-                j++;
-            }
-            free(str);
-            //printf("\nx: %f, y: %f, z: %f\n", xyz[0], xyz[1], xyz[2]);
-            vert_list[verts_counter] = (Vec_1x3){ xyz[0], xyz[1], xyz[2] };
-            verts_counter += 1;
-        }
-
-        if (data[i] == 't') {
-            float xy[2];
-
-            char* str = (char*)malloc(500);
-
-            int j = i + 2;
-            int counter = 0;
-            int pos_counter = 0;
-            while (1) {
-                if (data[j] == '\n') {
-                    str[counter] = '\0';
-                    xy[pos_counter] = atof(str);
-                    pos_counter += 1;
-                    counter = 0;
-                    break;
-                }
-                if (data[j] == ' ') {
-                    str[counter] = '\0';
-                    xy[pos_counter] = atof(str);
-                    pos_counter += 1;
-                    counter = 0;
-                }
-                else
-                {
-                    str[counter] = data[j];
-                    counter += 1;
-                }
-
-                j++;
-            }
-            free(str);
-            //printf("\nx: %f, y: %f\n", xy[0], xy[1]);
-            UV_list[UV_counter] = (Vec_1x2){ xy[0], xy[1] };
-            UV_counter += 1;
-        }
-        
-        if (data[i] == 'f') {
-
-            //char* str = (char*)malloc(500);
-            char* vert_str = (char*)malloc(500);
-            char* UV_str = (char*)malloc(500);
-
-
-            int j = i + 2;
-            Trianle tri;
-
-            int is_vert = 1;
-            int verts_counter_local = 0;
-            int UV_counter_local = 0;
-            int sides_counter = 0;
-   
-            Trianle_UV temp_UVs;
-            Trianle_vert temp_verts;
-
-            while (1) {
-                if (data[j] == '\n') {
-                    UV_str[UV_counter_local] = '\0';
-                    UV_counter_local = 0;
-                    verts_counter_local = 0;
-                    switch (sides_counter) {
-                        case 0:
-                            tri.UVs.a = UV_list[atoi(UV_str)-1];
-                            tri.verts.a = vert_list[atoi(vert_str) - 1];
-                            break;
-                        case 1:
-                            tri.UVs.b = UV_list[atoi(UV_str) - 1];
-                            tri.verts.b = vert_list[atoi(vert_str) - 1];
-                            break;
-                        case 2:
-                            tri.UVs.c = UV_list[atoi(UV_str) - 1];
-                            tri.verts.c = vert_list[atoi(vert_str) - 1];
-                            break;
-                    }
-                    break;
-                }
-                if (data[j] == ' ') {
-                    UV_str[UV_counter_local] = '\0';
-                    UV_counter_local = 0;
-                    verts_counter_local = 0;
-                    switch (sides_counter) {
-                        case 0:
-                            tri.UVs.a = UV_list[atoi(UV_str) - 1];
-                            tri.verts.a = vert_list[atoi(vert_str)-1];
-                            break;
-                        case 1:
-                            tri.UVs.b = UV_list[atoi(UV_str) - 1];
-                            tri.verts.b = vert_list[atoi(vert_str) - 1];
-                            break;
-                        case 2:
-                            tri.UVs.c = UV_list[atoi(UV_str) - 1];
-                            tri.verts.c = vert_list[atoi(vert_str) - 1];
-                            break;
-                    }
-                    sides_counter += 1;
-                }
-                if (data[j] == '/') {
-                    vert_str[verts_counter_local] = '\0';
-                    UV_counter_local = 0;
-                    verts_counter_local += 1;
-                }
-                else {
-                    UV_str[UV_counter_local] = data[j];
-                    vert_str[verts_counter_local] = data[j];
-                    verts_counter_local += 1;
-                    UV_counter_local += 1;
-                }
-                j++;
-            }
-            //printf("triangle a: %f %f %f b: %f %f %f b: %f %f %f ||| t1: %f %f t2: %f %f t1: %f %f\n",
-            //    tri.verts.a.x,
-            //    tri.verts.a.y,
-            //    tri.verts.a.z,
-            //    tri.verts.b.x,
-            //    tri.verts.b.y,
-            //    tri.verts.b.z,
-            //    tri.verts.c.x,
-            //    tri.verts.c.y,
-            //    tri.verts.c.z,
-            //
-            //    tri.UVs.a.x,
-            //    tri.UVs.a.y,
-            //    tri.UVs.b.x,
-            //    tri.UVs.b.y,
-            //    tri.UVs.c.x,
-            //    tri.UVs.c.y);
-            free(vert_str);
-            free(UV_str);
-            tri_list[tris_counter] = tri;
-            tris_counter++;
-        }
-
     }
+    memcpy(out.verts, list_verts_reference.data, sizeof(Vec_1x3) * list_verts_reference.size);
+    printf("coun: %d\n", list_tris.size);
 
-    free(data);
-    free(vert_list);
-    free(UV_list);
+    out.verst_reference = list_verts_reference.data;
+    out.vert_count = list_verts_reference.size;
+    out.tri_count = list_tris.size;
+    out.tris = list_tris.data;
+
     fclose(file);
     return out;
 
+
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

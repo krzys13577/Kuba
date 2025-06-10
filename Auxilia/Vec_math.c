@@ -53,6 +53,7 @@ void Add_in_place_1x2(Vec_1x2* a, Vec_1x2* b) {
 
 int get_len(Vec_1x3* line) {
 	return sqrt((line->x * line->x + line->y * line->y) + line->z * line->z);
+	// chyba nie diza³a
 }
 
 int is_in_tri(Vec_1x2* side_a, Vec_1x2* side_b, Vec_1x2* side_c, Vec_1x2* point_vec_1, Vec_1x2* point_vec_2, Vec_1x2* point_vec_3) {
@@ -66,4 +67,19 @@ int is_in_tri(Vec_1x2* side_a, Vec_1x2* side_b, Vec_1x2* side_c, Vec_1x2* point_
 	if (cors_2.z < 0) return 0;
 	if (cors_3.z < 0) return 0;
 	return 1;
+}
+
+Vec_1x4 multily_by_matrix_advanced(Vec_1x3* point, Mat4x4 mat, Vec_1x3* out){
+
+	float w = mat.row4.x * point->x + mat.row4.y * point->y + mat.row4.z * point->z + mat.row4.w;
+	if (!w) {
+		w = 1;
+	}
+
+	//temp fucking TEMP
+	// this aint working
+
+	out->x = (mat.row1.x * point->x + mat.row1.y * point->y + mat.row1.z * point->z + mat.row1.w)/w;
+	out->y = (mat.row2.x * point->x + mat.row2.y * point->y + mat.row2.z * point->z + mat.row2.w)/w;
+	out->z = (mat.row3.x * point->x + mat.row3.y * point->y + mat.row3.z * point->z + mat.row3.w);
 }
