@@ -19,6 +19,7 @@ typedef struct Trianle_UV {
 typedef struct Trianle {
 	Trianle_vert verts;
 	Trianle_UV UVs;
+
 } Trianle;
 
 

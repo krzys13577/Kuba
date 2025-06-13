@@ -10,11 +10,9 @@ void Cross_product_1x3(Vec_1x3* a, Vec_1x3* b, Vec_1x3* out){
 };
 
 void Cross_product_1x2(Vec_1x2* a, Vec_1x2* b, Vec_1x3* out) {
-	
 	out->x = 0;
 	out->y = 0;
 	out->z = a->x * b->y - a->y * b->x;
-	
 };
 
 void Add_in_place_1x3(Vec_1x3* a, Vec_1x3* b) {
@@ -69,17 +67,22 @@ int is_in_tri(Vec_1x2* side_a, Vec_1x2* side_b, Vec_1x2* side_c, Vec_1x2* point_
 	return 1;
 }
 
-Vec_1x4 multily_by_matrix_advanced(Vec_1x3* point, Mat4x4 mat, Vec_1x3* out){
+Vec_1x4 multily_by_matrix_advanced(Vec_1x4 point, Mat4x4 mat){
+	Vec_1x4 out;
 
-	float w = mat.row4.x * point->x + mat.row4.y * point->y + mat.row4.z * point->z + mat.row4.w;
-	if (!w) {
-		w = 1;
-	}
-
-	//temp fucking TEMP
-	// this aint working
-
-	out->x = (mat.row1.x * point->x + mat.row1.y * point->y + mat.row1.z * point->z + mat.row1.w)/w;
-	out->y = (mat.row2.x * point->x + mat.row2.y * point->y + mat.row2.z * point->z + mat.row2.w)/w;
-	out->z = (mat.row3.x * point->x + mat.row3.y * point->y + mat.row3.z * point->z + mat.row3.w);
+	out.x = mat.row1.x * point.x + mat.row1.y * point.y + mat.row1.z * point.z + mat.row1.w * point.w;
+	out.y = mat.row2.x * point.x + mat.row2.y * point.y + mat.row2.z * point.z + mat.row2.w * point.w;
+	out.z = mat.row3.x * point.x + mat.row3.y * point.y + mat.row3.z * point.z + mat.row3.w * point.w;
+	out.w = mat.row4.x * point.x + mat.row4.y * point.y + mat.row4.z * point.z + mat.row4.w * point.w;
+	return out;
 }
+
+
+Vec_1x3 rotVec(Vec_1x3 vec, Vec_1x3 rot) {
+	Vec_1x3 out;
+	out.x = vec.x * (cos(rot.y) * cos(rot.z)) + vec.y * (cos(rot.z) * sin(rot.x) * sin(rot.y) - cos(rot.x) * sin(rot.z)) + vec.z * (cos(rot.x) * cos(rot.z) * sin(rot.y) + sin(rot.x) * sin(rot.z));
+	out.y = vec.x * cos(rot.y) * sin(rot.z) + vec.y * (sin(rot.x) * sin(rot.y) * sin(rot.z) + cos(rot.x) * cos(rot.z)) + vec.z * (cos(rot.x) * sin(rot.y) * sin(rot.z) - cos(rot.z) * sin(rot.x));
+	out.z = vec.x * (-sin(rot.y)) + vec.y * (sin(rot.x) * cos(rot.y)) + vec.z * (cos(rot.x) * cos(rot.y));
+	return out;
+}
+

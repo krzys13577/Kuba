@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define TOP_LEFT_OFFSET(a) (a.y < 0 || (a.y == 0 && a.x > 0) ? 0 : -1)
+#define TOP_LEFT_OFFSET(a) (a.y < 0 || (a.y == 0 && a.x > 0) ? 0 : 0)
 #define EdgeCROSSZ(ab, ap) (ab.x* ap.y - ab.y * ap.x)
 #define GET_SAFE(buffer, x, y, index, light) (x < 0 || y < 0 || x >= buffer->w || y >= buffer->h ? (struct triInt){128, 0, 128} : (struct triInt){buffer->memory[index] * light, buffer->memory[index+3]*light, buffer->memory[index+2]*light})
 #define GET_SAFE_FLOAT(buffer_z, x, y, index) (x < 0 || y < 0 || x >= buffer_z->w || y >= buffer_z->h ? -2147483647 : ((float*)(buffer_z->memory))[index])
@@ -58,10 +58,9 @@ struct triInt get_Safe(struct GameWindowBuffer* buffer, int x, int y) {
 void Draw_triangle(Trianle* tri, GameWindowBuffer* screan, GameWindowBuffer* texture, GameWindowBuffer* depth_test, float light) {
 
 
-	
 	Vec_1x3 v0 = *tri->verts.a;
-	Vec_1x3 v1 = *tri->verts.b;
-	Vec_1x3 v2 = *tri->verts.c;
+	Vec_1x3 v1 = *tri->verts.c;
+	Vec_1x3 v2 = *tri->verts.b;
 
 	v0.y = ceil((v0.y + 1) * 0.5 * (float)screan->h);
 	v1.y = ceil((v1.y + 1) * 0.5 * (float)screan->h);
@@ -70,15 +69,6 @@ void Draw_triangle(Trianle* tri, GameWindowBuffer* screan, GameWindowBuffer* tex
 	v0.x = ceil((v0.x + 1) * 0.5 * (float)screan->w);
 	v1.x = ceil((v1.x + 1) * 0.5 * (float)screan->w);
 	v2.x = ceil((v2.x + 1) * 0.5 * (float)screan->w);
-
-
-	//v0.y = (v0.y + 1) * 0.5 * (float)screan->h;
-	//v1.y = (v1.y + 1) * 0.5 * (float)screan->h;
-	//v2.y = (v2.y + 1) * 0.5 * (float)screan->h;
-	//
-	//v0.x = (v0.x + 1) * 0.5 * (float)screan->w;
-	//v1.x = (v1.x + 1) * 0.5 * (float)screan->w;
-	//v2.x = (v2.x + 1) * 0.5 * (float)screan->w;
 
 	int x_min = (int)MIN(MIN(v0.x, v1.x), v2.x);
     int y_min = (int)MIN(MIN(v0.y, v1.y), v2.y);
@@ -116,8 +106,8 @@ void Draw_triangle(Trianle* tri, GameWindowBuffer* screan, GameWindowBuffer* tex
 	int y_text;
 	char is_in;
 
-	//int deepth;
 	int index;
+
 	for (int y = y_min; y <= y_max; y++) {
 
 		w0 = w0_baise;
@@ -131,8 +121,8 @@ void Draw_triangle(Trianle* tri, GameWindowBuffer* screan, GameWindowBuffer* tex
 				beta = (float)w1 / field;
 				gamma = (float)w2 / field;
 
-				x_text = tri->UVs.a.x * alpha + tri->UVs.b.x * beta + tri->UVs.c.x * gamma;
-				y_text = tri->UVs.a.y * alpha + tri->UVs.b.y * beta + tri->UVs.c.y * gamma;
+				x_text = tri->UVs.a.x * alpha + tri->UVs.c.x * beta + tri->UVs.b.x * gamma;
+				y_text = tri->UVs.a.y * alpha + tri->UVs.c.y * beta + tri->UVs.b.y * gamma;
 
 				float deepth = tri->verts.a->z * alpha + tri->verts.b->z * beta + tri->verts.c->z * gamma +1;
 				index = 4 * (x_text + y_text * texture->w);
@@ -195,6 +185,4 @@ void Draw_triangle_outline(Trianle* tri, GameWindowBuffer* screen, struct triInt
 	Draw_line(screen, (int)v0.x, (int)v0.y, (int)v1.x, (int)v1.y, color);
 	Draw_line(screen, (int)v1.x, (int)v1.y, (int)v2.x, (int)v2.y, color);
 	Draw_line(screen, (int)v2.x, (int)v2.y, (int)v0.x, (int)v0.y, color);
-
-
 }

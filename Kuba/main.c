@@ -15,7 +15,11 @@ GameWindowBuffer Depth = { 0 };
 BITMAPINFO bitmapInfo = { 0 };
 HWND wind;
 int fps = 0;
+float speed = 0.3;
 
+Camera cam;
+
+Sceane sceane;
 
 void print_mesh_info(const Mesh* mesh) {
     for (int i = 0; i < mesh->vert_count; ) {
@@ -81,6 +85,61 @@ LRESULT CALLBACK windProc(HWND wind, UINT msg, WPARAM wp, LPARAM lp)
         EndPaint(wind, &Paint);
     } break;
 
+    case WM_KEYDOWN:
+        if (wp == VK_UP)
+        {
+            sceane.camera.pos.y +=0.1;
+        }
+        if (wp == VK_DOWN)
+        {
+            sceane.camera.pos.y -= 0.1;
+        }
+        if (wp == VK_LEFT)
+        {
+            sceane.camera.pos.y += 0.1;
+        }
+        if (wp == VK_RIGHT)
+        {
+            sceane.camera.pos.y -= 0.1;
+        }
+        if (wp == 'W')
+        {
+            Add_in_place_1x3(&sceane.camera.pos, &(Vec_1x3)mul_vec_direct(sceane.camera.lookDir, speed));
+            //printf("%f");
+        }
+        if (wp == 'S')
+        {
+            sub_in_place_1x3(&sceane.camera.pos, &(Vec_1x3)mul_vec_direct(sceane.camera.lookDir, speed));
+            //printf("%f\n", sceane.camera.lookDir.z);
+        }
+        if (wp == 'Z')
+        {  
+            sceane.camera.rot.y += 0.01;
+        }
+        if (wp == 'C')
+        {
+            sceane.camera.rot.y -= 0.01;
+        }
+        if (wp == 'O')
+        {
+            sceane.camera.rot.x += 0.01;
+        }
+        if (wp == 'P')
+        {
+            sceane.camera.rot.x -= 0.01;
+        }
+        if (wp == 'A')
+        {
+            sceane.camera.pos.x += 0.1;
+        }
+        if (wp == 'D')
+        {
+            sceane.camera.pos.x -= 0.1;
+        }
+        break;
+
+
+
     default:
         rez = DefWindowProc(wind, msg, wp, lp);
         break;
@@ -108,75 +167,60 @@ int main() {
         ((int*)(Depth.memory))[i] = 0;
     }
 
-    //Trianle tri;
-    //tri.verts.a = (Vec_1x3){ 500,000,500 };
-    //tri.verts.b = (Vec_1x3){ 500,500,500 };
-    //tri.verts.c = (Vec_1x3){ 000,500,500 };
-    //
-    //tri.UVs.a = (Vec_1x2){ 500,000};
-    //tri.UVs.b = (Vec_1x2){ 500,500};
-    //tri.UVs.c = (Vec_1x2){ 000,500};
-    //
-    //Trianle tri2;
-    //tri2.verts.a = (Vec_1x3){ 000, 000, 500 };
-    //tri2.verts.b = (Vec_1x3){ 500,000,500 };
-    //tri2.verts.c = (Vec_1x3){ 000,500,500 };
-    //   
-    //tri2.UVs.a = (Vec_1x2){ 0,0 };
-    //tri2.UVs.b = (Vec_1x2){ 500,0 };
-    //tri2.UVs.c = (Vec_1x2){ 0,500 };
-
     GameWindowBuffer texture = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\T-34.bmp");
     GameWindowBuffer BLUE = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\BLUE.bmp");
     GameWindowBuffer RED = read_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\red.bmp");
-    
+
 
     DWORD ThreadId_send;
 
     Mesh mesh1 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt", texture.w, texture.h);
-    Mesh mesh2 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt", texture.w, texture.h);
+    Mesh mesh2 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\sph.txt", texture.w, texture.h);
+    //Mesh mesh3 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt", texture.w, texture.h);
+    //Mesh mesh4 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube.txt", texture.w, texture.h);
     //print_mesh_info(&mesh1);
 
-    mesh1.pos = (Vec_1x3){0,0,15.0};
-    mesh1.rot = (Vec_1x3){0,0,0};
-    mesh1.scale = (Vec_1x3){0.3,0.3,0.3};
-    mesh2.pos = (Vec_1x3){0,0,40};
-    mesh2.rot = (Vec_1x3){0,0,0};
-    mesh2.scale = (Vec_1x3){0.3,0.3,0.3 };
 
-    //Mesh mesh2 = load_mesh_from_file("C:\\Users\\KrzysztofPolowczyk\\Desktop\\cube2.txt");
+
+    mesh1.pos = (Vec_1x3){ 0,0,10 };
+    mesh1.rot = (Vec_1x3){0,0,0};
+    mesh1.scale = (Vec_1x3){0.5,0.5,0.5};
+
+    mesh2.pos = (Vec_1x3){5,0,10.0};
+    mesh2.rot = (Vec_1x3){0,0,0};
+    mesh2.scale = (Vec_1x3){0.5,0.5,0.5 };
+    //
+    //mesh3.pos = (Vec_1x3){ 50,0,10.0 };
+    //mesh3.rot = (Vec_1x3){ 0,0,0 };
+    //mesh3.scale = (Vec_1x3){ 0.5,0.5,0.5 };
+    //
+    //mesh4.pos = (Vec_1x3){ -50,0,10.0 };
+    //mesh4.rot = (Vec_1x3){ 0,0,0 };
+    //mesh4.scale = (Vec_1x3){ 0.5,0.5,0.5 };
+
 
     CreateThread(NULL, 0, FPS, NULL, 0, NULL);
 
-    Camera cam = {
-        {0,0,0},
-        {0,0,0},
-        {0,0,-1},
-        {1,0,0},
-        {1,0,0}
+    cam = (Camera){
+        { 0, 0, 5 },
+        { 0,0,1 },
+        { 0,1,0 },
     };
-
-    Sceane sceane = init_sceane(1, cam);
+    
+    sceane = init_sceane(2, cam); 
 
     sceane.objects[0] = &mesh1;
-    //sceane.objects[1] = &mesh2;
+    sceane.objects[1] = &mesh2;
+    //sceane.objects[2] = &mesh3;
+    //sceane.objects[3] = &mesh4;
 
     
     float counter = 0;
     while (Is_running) {
-        mesh1.rot.z = counter/10;
-        mesh1.rot.x = counter/10;
-        //mesh2.rot.z = counter / 10;
-        //mesh2.rot.x = counter / 10;
-        //mesh1.rot.y = counter/20;
-
-        //mesh1.pos.y = sin(counter)*0.2;
-        //mesh1.rot.y = counter*2;
-        //mesh1.rot.y = counter/8;
-        //mesh1.scale.y = 4* sin(counter)* sin(counter);
-        //mesh1.scale.x = 4* sin(counter)* sin(counter);
-        //mesh1.scale.y = 4* sin(counter)* sin(counter);
-        
+        //mesh1.rot.z = counter/20;
+        //mesh1.rot.x = counter/20;
+        //
+        //mesh2.scale.y = cos(counter / 10) * cos(counter / 10) + 0.5;
         handle_entires(wind);
 
         clear(&gameWindowBuffer, &Depth);
@@ -185,7 +229,6 @@ int main() {
         InvalidateRect(wind, NULL, FALSE);
 
         fps += 1;
-        //Sleep(500);
         counter += 0.01;
     }
 }
